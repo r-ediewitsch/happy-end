@@ -29,9 +29,15 @@ func main() {
 	{
 		api.GET("/logs", logsHandler.GetLogs)
 		api.GET("/logs/:id", logsHandler.GetLogById)
-		api.POST("/logs", logsHandler.CreateLog)
-		api.PUT("/logs/:id", logsHandler.UpdateLog)
-		api.DELETE("/logs/:id", logsHandler.DeleteLog)
+	}
+
+	if cfg.AppUrl == "development" {
+		dev := r.Group("/dev")
+		{
+			dev.POST("/logs", logsHandler.CreateLog)
+			dev.PUT("/logs/:id", logsHandler.UpdateLog)
+			dev.DELETE("/logs/:id", logsHandler.DeleteLog)
+		}
 	}
 
 	log.Printf("Server listening on port %s", cfg.Port)
