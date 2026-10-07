@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 
 	"happy-end/internal/config"
 	"happy-end/internal/database"
@@ -24,6 +25,20 @@ func main() {
 	logsHandler := handler.NewLogHandler(logsRepo)
 
 	r := gin.Default()
+
+	r.GET("/health", func(c *gin.Context) {
+		if err := db.Ping(); err != nil {
+			c.JSON(http.StatusServiceUnavailable, gin.H{
+				"status":   "unhealthy",
+				"database": "disconnected",
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"status":   "healthy",
+			"database": "connected",
+		})
+	})
 
 	api := r.Group("/api")
 	{
