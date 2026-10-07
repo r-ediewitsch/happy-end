@@ -20,7 +20,7 @@ func Load() Config {
 
 	appUrl := os.Getenv("APP_URL")
 	if appUrl == "" {
-		appUrl = "development"
+		appUrl = "production"
 	}
 
 	port := os.Getenv("PORT")
